@@ -50,12 +50,41 @@ flowchart LR
 - The app and the LLM gateway listen on localhost only.
 - Per-visitor rate limits protect the public instance.
 
+## Questions and answers
+
+### What problem does it solve?
+Before going live, small teams usually don't know what their project is missing (CI/CD, monitoring, backups, secrets handling), what it will cost per month, or what to run it on. Answers are scattered across blog posts and cloud pricing pages. InfraLoop turns one scan and a few questions into one clear plan.
+
+### How is this different from asking an LLM?
+A chatbot guesses from whatever you paste in. InfraLoop does the opposite:
+- The scan, the gap analysis and the cost math are **plain code**, so the same project gives the same result.
+- An LLM is **optional** and only polishes wording. Every sentence it writes is checked against the findings, and if a sentence fails the check, the code-written text is used.
+- Your **source code and secrets never go to the LLM**.
+
+### Who is it for?
+Developers, students and small teams planning to deploy a project who want a realistic plan and a monthly cost before they spend money.
+
+### Why is there no code in this repository?
+The source is private for now, because the tool is still changing quickly. This repository documents what it does and how it is built, and the live tool is free to use, so you can judge it yourself.
+
+### Is it really free?
+Yes. InfraLoop is free and will stay free. The public instance runs on a small server, so there are per-visitor hourly limits.
+
+### What do I see on the live site, and is it finished?
+What you see at https://infraloop.space is roughly **30% of the planned work**. It already scans, asks questions and produces a plan with costs, and more is coming soon.
+
+### What is planned next?
+- Separate **required** and **optional** findings, so small projects aren't told they have gaps they don't need to fix
+- A **free or near-free option** for tiny projects
+- **Provider-neutral** recommendations, not tied to one cloud
+- **Structured JSON export** (findings, costs, gaps) so reports can be compared in CI
+- Better scaling advice and a clearer "what to do first" list
+
+### How can I give feedback?
+Open an issue in this repository, or try the tool and tell me where the plan or cost estimate looks wrong. That is the most useful feedback.
+
 ## Stack
 
 Python, FastAPI, LangGraph, Podman, Caddy, Cloudflare DNS, Oracle Cloud. 177 automated tests.
-
-## Status
-
-Source is private for now. Feedback is welcome: open an issue or contact me.
 
 Built by Dhruvil Satani.
