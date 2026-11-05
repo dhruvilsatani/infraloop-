@@ -13,6 +13,28 @@ InfraLoop scans a project (a repository or uploaded files), asks a few questions
 
 Your source code and secrets are never sent to an LLM.
 
+## Why I built it
+
+Every time I wanted to take a project to production, I had to stop and ask the same questions:
+
+- Can I run this on **Vercel** or another free service? Will the **best free tier** be enough?
+- If it is not a new project and I need to **scale**, do I need a self-managed **Kubernetes** cluster, a managed one, a **self-hosted server**, or **Lambda / serverless**? Which of these is comparable for my case?
+- If I have a **compute-heavy task**, do I need a **GPU**, and how much?
+- What happens when there is a **database**? How big, where, and how is it backed up?
+- What will it cost per month today, and at 10x the traffic?
+- What am I missing: monitoring, CI/CD, backups, secrets handling?
+- Do I need more than one region, or is that overkill for now?
+
+The answers are scattered across docs, pricing pages and opinions. Then I thought: a good LLM like Claude can answer this. But is it **safe** to hand it the whole project?
+
+I had spent a lot of time building the logic of my projects. A project can also contain **secrets** such as API keys, tokens and passwords, and I don't want to send those to anyone. Leaked keys are a real and recurring problem. Examples that were widely reported:
+
+- **Uber (2016):** attackers found cloud credentials in a private code repository and used them to reach customer and driver data.
+- **Toyota (2022):** a contractor's source code containing an access key was publicly available on GitHub for years.
+- **Samsung (2023):** engineers pasted internal source code into a public chatbot, and the company then restricted its use.
+
+So I asked: why not build something that gives the **reasoning of AI** without giving up **security**? That became InfraLoop. A deterministic scanner reads the project locally, plain code does the analysis and cost math, and an LLM is optional and only sees the findings, never the code or secrets.
+
 ## How it works
 
 ```mermaid
@@ -46,6 +68,7 @@ flowchart LR
     GW --> M[Model providers]
 ```
 
+- **Currently deployed on Oracle Cloud.** The next major version is planned on **Azure**.
 - Caddy is the only service facing the internet.
 - The app and the LLM gateway listen on localhost only.
 - Per-visitor rate limits protect the public instance.
